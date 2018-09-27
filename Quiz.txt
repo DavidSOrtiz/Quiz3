@@ -1,0 +1,23 @@
+Parte 1
+Create tablespace quiz datafile 'quiz01.dbf' size 15M, 'quiz02.dbf' size 15M, 'quiz03.dbf' size 15M;
+create profile student limit IDLE_TIME 20;
+create user usuario_1 identified by usuario_1 default tablespace quiz quota unlimited on quiz profile student;
+create user usuario_2 identified by usuario_2 default tablespace quiz quota unlimited on quiz profile student;
+grant create table to usuario_1;
+grant create session to usuario_1;
+grant create session to usuario_2;
+
+Parte 2
+create table attacks(
+	id integer,
+	url varchar2(2048),
+	ip_address varchar2(255),
+	number_of_attacks integer,
+	time_of_last_attack timestamp);
+    
+GRANT SELECT ON attacks TO usuario_2;
+Parte 3
+select * from attacks;
+Select count(url) from attacks WHERE url LIKE 'https%';
+Select rownum,url,number_of_attacks from attacks WHERE url LIKE '%google%' order by number_of_attacks asc;
+Select rownum,ip_address,time_of_last_attack from attacks WHERE url LIKE '%google%' and time_of_last_attack BETWEEN TO_DATE ('2017-01-01T00:00:00', 'YYYY-MM-DD"T"HH24:MI:SS') AND TO_DATE('2017-12-31T23:59:59', 'YYYY-MM-DD"T"HH24:MI:SS') order by number_of_attacks asc;
